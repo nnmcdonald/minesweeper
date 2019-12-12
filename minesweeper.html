@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Minesweeper</title>
+  <link rel="stylesheet" href="css/minesweeper.css">
+</head>
+
+<body>
+  <div id="pageWrap">
+    <div class="container-flex">
+      <h1 id="minesweeperHeading">Minesweeper</h1>
+    </div>
+    <div id="GameSection" class="container-flex"></div>
+    <div id="GameButtons" class="container-flex">
+      <button id="StartGame" class="Button">Start Game</button>
+      <button id="GameRules" class="Button"
+      onclick="document.location.href = 'https://en.wikipedia.org/wiki/Minesweeper_(video_game)'">Game Rules</button>
+      <button id="ResetFlagButton" class="hidden Button">Reset Flags</button>
+      <button id="ResetGameButton" class="hidden Button">Reset Game</button>
+    </div>
+  </div>
+</body>
+
+<script src="js/minesweeper.js"></script>
+</html>
