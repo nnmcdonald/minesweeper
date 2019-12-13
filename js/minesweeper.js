@@ -8,6 +8,7 @@ let gameBoard = [];
 let selectedButtons = [];
 let mines = 0;
 let flags = 0;
+let unselectedButtonCount = 0;
 let settingFlags = false;
 
 function updateCellValues(xVal, yVal) {
@@ -69,8 +70,14 @@ function getGameTableHTML(dims) {
   return gameBoardTable;
 };
 
+function resetUnselectedButtonsCount() {
+  let gameDims = getGameSize();
+  unselectedButtonCount = gameDims[0] * gameDims[1];
+};
+
 function createGameBoard() {
   let gameDims = getGameSize();
+  resetUnselectedButtonsCount();
   // Initialize board values to 0
   for(let i = 0; i < gameDims[0]; i++) {
     gameBoard[i] = [];
@@ -93,6 +100,25 @@ function toggleGameButtons() {
   $("#ResetGameButton").toggleClass("hidden");
 };
 
+function revealMines() {
+
+};
+
+function toggleGame() {
+  $("#GameSection").toggleClass("disabled");
+};
+
+function gameLost() {
+  revealMines();
+  $("#Outcome").html("Sorry, You Lost");
+  $("#GameSection").addClass("disabled");
+};
+
+function gameWon() {
+  $("#Outcome").html("Congratulations, You Win!");
+  $("#GameSection").addClass("disabled");
+};
+
 // The function to be called when a gameBoard button is clicked
 let cellClicked = function(event) {
   let buttonID = parseInt($(this).attr("id"));
@@ -109,7 +135,15 @@ let cellClicked = function(event) {
         // button is flagged, do nothing
       } else {
         selectedButtons[firstIndex][secondIndex] = 1;
-        $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+        if(gameBoard[firstIndex][secondIndex] === -1) {
+          gameLost();
+        } else {
+          $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+          unselectedButtonCount--;
+          if(unselectedButtonCount === parseInt(mines)) {
+            gameWon();
+          }
+        };
       };
     } else {
       // unset a flag that was previously set
@@ -126,7 +160,6 @@ let cellClicked = function(event) {
       }
     };
   };
-
 };
 
 function displayMineCountButtons() {
@@ -144,6 +177,7 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(createGameBoard());
+    console.log(gameBoard);
     $("#GameBoardTable .Button-table").mousedown(cellClicked);
     toggleGameButtons();
   });
@@ -157,6 +191,8 @@ $("#StartGame").click(function() {
 $("#NewGame").click(function() {
   toggleGameButtons();
   displayMineCountButtons();
+  $("#Outcome").html("");
+  $("#GameSection").removeClass("disabled");
   gameBoard = [];
 });
 
@@ -171,6 +207,7 @@ $("#AddFlagsButton, #DoneAddingFlagsButton").click(function() {
 });
 
 $("#ResetFlagButton").click(function() {
+  unselectedButtonCount += flags;
   flags = 0;
   let gameDims = getGameSize();
   for(let i = 0; i < gameDims[0]; i++) {
@@ -186,6 +223,9 @@ $("#ResetFlagButton").click(function() {
 
 // Reverts game to initial state
 $("#ResetGameButton").click(function() {
+  resetUnselectedButtonsCount();
+  $("#Outcome").html("");
+  $("#GameSection").removeClass("disabled");
   let gameDims = getGameSize();
   for(let i = 0; i < gameDims[0]; i++) {
     for(let j = 0; j < gameDims[1]; j++) {
