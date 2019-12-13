@@ -101,7 +101,25 @@ function toggleGameButtons() {
 };
 
 function revealMines() {
+  let dims = getGameSize();
+  for(let i = 0; i < dims[0]; i++) {
+    for(let j = 0; j < dims[1]; j++) {
+      if(gameBoard[i][j] === -1) {
+        $("#GameBoardTable #" + ((i * dims[0]) + j)).html("<img class='bomb' src='images/boom.png'>");
+      };
+    };
+  };
+};
 
+function hideMines() {
+  let dims = getGameSize();
+  for(let i = 0; i < dims[0]; i++) {
+    for(let j = 0; j < dims[1]; j++) {
+      if(gameBoard[i][j] === -1) {
+        $("#GameBoardTable #" + ((i * dims[0]) + j)).html("");
+      };
+    };
+  };
 };
 
 function toggleGame() {
@@ -193,6 +211,7 @@ $("#NewGame").click(function() {
   displayMineCountButtons();
   $("#Outcome").html("");
   $("#GameSection").removeClass("disabled");
+  hideMines();
   gameBoard = [];
 });
 
@@ -226,6 +245,7 @@ $("#ResetGameButton").click(function() {
   resetUnselectedButtonsCount();
   $("#Outcome").html("");
   $("#GameSection").removeClass("disabled");
+  hideMines();
   let gameDims = getGameSize();
   for(let i = 0; i < gameDims[0]; i++) {
     for(let j = 0; j < gameDims[1]; j++) {
