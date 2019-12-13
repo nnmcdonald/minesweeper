@@ -136,6 +136,17 @@ $("#NewGame").click(function() {
   gameBoard = [];
 });
 
+// Reverts game to initial state
 $("#ResetGameButton").click(function() {
-  // TODO reset game board buttons
+  let gameDims = getGameSize();
+  for(let i = 0; i < gameDims[0]; i++) {
+    for(let j = 0; j < gameDims[1]; j++) {
+      if(selectedButtons[i][j]) {
+        let buttonID = $("#GameBoardTable #" + ((i * gameDims[0]) + j));
+        buttonID.html("");
+        buttonID.removeClass("disabled");
+        selectedButtons[i][j] = 0;
+      };
+    };
+  };
 });
