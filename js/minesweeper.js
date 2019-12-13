@@ -5,7 +5,7 @@ let difficulties = ["10", "40", "99"];
 let gameBoard = [];
 let mines = 0;
 
-function updateCellValues3(xVal, yVal) {
+function updateCellValues(xVal, yVal) {
   gameBoard[xVal][yVal] = -1;
   for(let i = 0; i < 3; i++) {
     for(let j = 0; j < 3; j++) {
@@ -20,38 +20,40 @@ function updateCellValues3(xVal, yVal) {
   };
 };
 
-function createGameBoard() {
+function getGameSize() {
   // Used to access game dimensions in gameSizes
   let index = null;
   for(let i = 0; i < difficulties.length; i++) {
     if(mines == difficulties[i]) {
-      index = i;
-      break;
+      return gameSizes[i];
     };
   };
-  // Initialize board values to 0
-  for(let i = 0; i < gameSizes[index][0]; i++) {
-    gameBoard[i] = [];
-    for(let j = 0; j < gameSizes[index][1]; j++) {
-      gameBoard[i][j] = 0;
-    };
-  };
+  // An error occured
+  return null;
+};
+
+function placeMines(dims) {
+  // Place the mines in random locations, mines can be placed
+  // anywhere there isn't already a mine (as indicated by -1)
   for(let i = 0; i < parseInt(mines); i++) {
     let randX = null;
     let randY = null;
 
     do {
-      randX = Math.floor(Math.random() * gameSizes[index][0]);
-      randY = Math.floor(Math.random() * gameSizes[index][1]);
+      randX = Math.floor(Math.random() * dims[0]);
+      randY = Math.floor(Math.random() * dims[1]);
     } while(gameBoard[randX][randY] === -1);
-    updateCellValues3(randX, randY);
+    updateCellValues(randX, randY);
   };
+};
+
+function getGameTableHTML(dims) {
   let gameBoardTable = "";
   let cellIdentifier = 0;
   gameBoardTable += '<table id="GameBoardTable">';
-  for(let i = 0; i < gameSizes[index][0]; i++) {
+  for(let i = 0; i < dims[0]; i++) {
     gameBoardTable += '<tr>';
-    for(let j = 0; j < gameSizes[index][1]; j++) {
+    for(let j = 0; j < dims[1]; j++) {
       gameBoardTable += "<td><button id='" + cellIdentifier +
                       "' class='Button-table'>" + gameBoard[i][j] + "</button></td>";
       cellIdentifier++;
@@ -61,7 +63,19 @@ function createGameBoard() {
   return gameBoardTable;
 };
 
+function createGameBoard() {
+  let gameDims = getGameSize();
+  // Initialize board values to 0
+  for(let i = 0; i < gameDims[0]; i++) {
+    gameBoard[i] = [];
+    for(let j = 0; j < gameDims[1]; j++) {
+      gameBoard[i][j] = 0;
+    };
+  };
+  placeMines(gameDims);
 
+  return getGameTableHTML(gameDims);
+};
 
 // These buttons are hidden initially and when choosing the number of mines
 function toggleGameButtons() {
