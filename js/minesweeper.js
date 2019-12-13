@@ -7,6 +7,12 @@ function generateGame() {
   return "Game in progress.";
 };
 
+function toggleGameButtons() {
+  $("#NewGame").toggleClass("hidden");
+  $("#ResetFlagButton").toggleClass("hidden");
+  $("#ResetGameButton").toggleClass("hidden");
+};
+
 function displayMineCountButtons() {
   let gameSection = $("#GameSection");
   let mineCountSection = $("#MineCountButtons");
@@ -22,18 +28,17 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(generateGame());
+    toggleGameButtons();
     console.log(mines);
   });
 };
 
 $("#StartGame").click(function() {
   $("#StartGame").toggleClass("hidden");
-  $("#NewGame").toggleClass("hidden");
-  $("#ResetFlagButton").toggleClass("hidden");
-  $("#ResetGameButton").toggleClass("hidden");
   displayMineCountButtons();
 });
 
 $("#NewGame").click(function() {
+  toggleGameButtons();
   displayMineCountButtons();
 });
