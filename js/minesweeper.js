@@ -11,6 +11,26 @@ let flags = 0;
 let unselectedButtonCount = 0;
 let settingFlags = false;
 
+let gameButtons = [
+  '<button id="StartGame" class="Button">Start Game</button>',
+  '<button id="NewGame" class="hidden Button">New Game</button>',
+  '<button id="GameRules" class="Button" onclick="document.location.href = \'https://en.wikipedia.org/wiki/Minesweeper_(video_game)\'">Game Rules</button>',
+  '<button id="AddFlagsButton" class="hidden Button">Add Flags</button>',
+  '<button id="DoneAddingFlagsButton" class="hidden Button">Done</button>',
+  '<button id="ResetFlagButton" class="hidden Button">Reset Flags</button>',
+  '<button id="ResetGameButton" class="hidden Button">Reset Game</button>',
+]
+
+function getGameButtonsString() {
+  let gbString = "";
+  for(let i = 0; i < gameButtons.length; i++) {
+    gbString += gameButtons[i];
+  };
+  return gbString;
+}
+
+$("#GameButtons").html(getGameButtonsString());
+
 function updateCellValues(xVal, yVal) {
   gameBoard[xVal][yVal] = -1;
   for(let i = 0; i < 3; i++) {
