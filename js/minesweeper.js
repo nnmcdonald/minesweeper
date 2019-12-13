@@ -5,26 +5,63 @@ let difficulties = ["10", "40", "99"];
 let gameBoard = [];
 let mines = 0;
 
-function createGameBoard(index) {
+function updateCellValues3(xVal, yVal) {
+  gameBoard[xVal][yVal] = -1;
+  for(let i = 0; i < 3; i++) {
+    for(let j = 0; j < 3; j++) {
+      try {
+        if(gameBoard[xVal+1-i][yVal+1-j] != -1) {
+          gameBoard[xVal+1-i][yVal+1-j]++;
+        };
+      } catch(error) {
+        // do nothing
+      };
+    };
+  };
+};
+
+function createGameBoard() {
+  // Used to access game dimensions in gameSizes
+  let index = null;
+  for(let i = 0; i < difficulties.length; i++) {
+    if(mines == difficulties[i]) {
+      index = i;
+      break;
+    };
+  };
+  // Initialize board values to 0
   for(let i = 0; i < gameSizes[index][0]; i++) {
     gameBoard[i] = [];
     for(let j = 0; j < gameSizes[index][1]; j++) {
-      gameBoard[i][j] = null;
+      gameBoard[i][j] = 0;
     };
   };
-  console.log(gameBoard);
+  for(let i = 0; i < parseInt(mines); i++) {
+    let randX = null;
+    let randY = null;
+
+    do {
+      randX = Math.floor(Math.random() * gameSizes[index][0]);
+      randY = Math.floor(Math.random() * gameSizes[index][1]);
+    } while(gameBoard[randX][randY] === -1);
+    updateCellValues3(randX, randY);
+  };
+  let gameBoardTable = "";
+  let cellIdentifier = 0;
+  gameBoardTable += '<table id="GameBoardTable">';
+  for(let i = 0; i < gameSizes[index][0]; i++) {
+    gameBoardTable += '<tr>';
+    for(let j = 0; j < gameSizes[index][1]; j++) {
+      gameBoardTable += "<td><button id='" + cellIdentifier +
+                      "' class='Button-table'>" + gameBoard[i][j] + "</button></td>";
+      cellIdentifier++;
+    };
+  };
+  gameBoardTable += "</table>";
+  return gameBoardTable;
 };
 
-function generateGame() {
-  for(let i = 0; i < difficulties.length; i++) {
-    if(mines == difficulties[i]) {
-      createGameBoard(i);
-      break;
-    };
-    // TODO create table to display board
-  };
-  return "Game in progress.";
-};
+
 
 // These buttons are hidden initially and when choosing the number of mines
 function toggleGameButtons() {
@@ -47,9 +84,8 @@ function displayMineCountButtons() {
   $("#MineCountButtons .Button").click(function() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
-    gameSection.html(generateGame());
+    gameSection.html(createGameBoard());
     toggleGameButtons();
-    console.log(mines);
   });
 };
 
@@ -62,4 +98,8 @@ $("#NewGame").click(function() {
   toggleGameButtons();
   displayMineCountButtons();
   gameBoard = [];
+});
+
+$("#ResetGameButton").click(function() {
+  console.log(Math.random());
 });
