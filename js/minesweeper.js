@@ -179,8 +179,12 @@ $("#ResetGameButton").click(function() {
     for(let j = 0; j < gameDims[1]; j++) {
       if(selectedButtons[i][j]) {
         let buttonID = $("#GameBoardTable #" + ((i * gameDims[0]) + j));
-        buttonID.html("");
-        buttonID.removeClass("disabled");
+        if(selectedButtons[i][j] === 1) {
+          buttonID.html("");
+          buttonID.removeClass("disabled");
+        } else {
+          buttonID.toggleClass("Button-table").toggleClass("Button-flagged");
+        };
         selectedButtons[i][j] = 0;
       };
     };
