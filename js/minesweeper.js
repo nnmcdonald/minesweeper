@@ -9,14 +9,18 @@ function generateGame() {
 
 function displayMineCountButtons() {
   let gameSection = $("#GameSection");
-  let mineCountButtons = "<div class='container-flex'><h2>Please select number of mines:</h2></div>";
+  let mineCountSection = $("#MineCountButtons");
+  let mineCountButtons = "";
   for(let i = 0; i < difficulties.length; i++) {
     mineCountButtons += "<button id='" + difficulties[i] + "' class='Button'>" + difficulties[i] + "</button>";
   };
-  gameSection.html(mineCountButtons);
+  gameSection.html("<h2>Please choose number of mines.</h2>");
+  mineCountSection.html(mineCountButtons);
+  mineCountSection.toggleClass("hidden");
 
-  $("#GameSection .Button").click(function() {
+  $("#MineCountButtons .Button").click(function() {
     mines = $(this).attr("id");
+    mineCountSection.toggleClass("hidden");
     gameSection.html(generateGame());
     console.log(mines);
   });
