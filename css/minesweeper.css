@@ -17,17 +17,27 @@
   border-radius: 3px;
 }
 
+.Button-table {
+  text-align: center;
+  vertical-align: bottom;
+  background-color: white;
+  color: black;
+  width: 100%;
+  height: 18px;
+  border: none;
+  margin: none;
+  padding: none;
+}
+
 .Button:hover {
   background-color: blue;
   color: white;
   border: 1px solid blue;
 }
 
-.Button-table {
-  background-color: white;
-  color: black;
-  border: none;
-  margin: 2px;
+.Button-table:hover {
+  background-color: blue;
+  color: white;
 }
 
 .Button-Success {
@@ -58,13 +68,21 @@
 }
 
 table {
-  table-layout: fixed;
-  border: 1px solid black;
   margin-bottom: 5px;
+  border-collapse: collapse;
+}
+
+tr {
+  margin: 0;
+  padding: 0;
 }
 
 td {
   border: 1px solid black;
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  padding: 0;
 }
 
 #pageWrap {

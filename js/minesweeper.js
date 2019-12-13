@@ -3,6 +3,9 @@
 let gameSizes = [[9,9],[16,16],[16,30]]
 let difficulties = ["10", "40", "99"];
 let gameBoard = [];
+// selectedButtons[i][j] indicates whether gameBoard[i][j] has been clicked,
+// -1 denotes a flag, 0 denotes unselected button, 1 denotes a selected button
+let selectedButtons = [];
 let mines = 0;
 
 function updateCellValues(xVal, yVal) {
@@ -47,6 +50,7 @@ function placeMines(dims) {
   };
 };
 
+// Generates table representation of gameBoard in HTML
 function getGameTableHTML(dims) {
   let gameBoardTable = "";
   let cellIdentifier = 0;
@@ -55,7 +59,7 @@ function getGameTableHTML(dims) {
     gameBoardTable += '<tr>';
     for(let j = 0; j < dims[1]; j++) {
       gameBoardTable += "<td><button id='" + cellIdentifier +
-                      "' class='Button-table'>" + gameBoard[i][j] + "</button></td>";
+                      "' class='Button-table'></button></td>";
       cellIdentifier++;
     };
   };
@@ -68,8 +72,10 @@ function createGameBoard() {
   // Initialize board values to 0
   for(let i = 0; i < gameDims[0]; i++) {
     gameBoard[i] = [];
+    selectedButtons[i] = [];
     for(let j = 0; j < gameDims[1]; j++) {
       gameBoard[i][j] = 0;
+      selectedButtons[i][j] = 0;
     };
   };
   placeMines(gameDims);
@@ -82,6 +88,11 @@ function toggleGameButtons() {
   $("#NewGame").toggleClass("hidden");
   $("#ResetFlagButton").toggleClass("hidden");
   $("#ResetGameButton").toggleClass("hidden");
+};
+
+// The function to be called when a gameBoard button is clicked
+let cellClicked = function() {
+  console.log($(this).attr("id"));
 };
 
 function displayMineCountButtons() {
@@ -99,6 +110,7 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(createGameBoard());
+    $("#GameBoardTable .Button-table").click(cellClicked);
     toggleGameButtons();
   });
 };
@@ -115,5 +127,5 @@ $("#NewGame").click(function() {
 });
 
 $("#ResetGameButton").click(function() {
-  console.log(Math.random());
+  // TODO reset game board buttons
 });
