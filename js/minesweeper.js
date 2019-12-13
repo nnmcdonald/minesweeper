@@ -8,6 +8,7 @@ let gameBoard = [];
 let selectedButtons = [];
 let mines = 0;
 let flags = 0;
+let settingFlags = false;
 
 function updateCellValues(xVal, yVal) {
   gameBoard[xVal][yVal] = -1;
@@ -87,6 +88,7 @@ function createGameBoard() {
 // These buttons are hidden initially and when choosing the number of mines
 function toggleGameButtons() {
   $("#NewGame").toggleClass("hidden");
+  $("#AddFlagsButton").toggleClass("hidden");
   $("#ResetFlagButton").toggleClass("hidden");
   $("#ResetGameButton").toggleClass("hidden");
 };
@@ -102,14 +104,14 @@ let cellClicked = function(event) {
   if(selectedButtons[firstIndex][secondIndex] === 1) {
     // do nothing
   } else {
-    if(event.which === 1) {
+    if(!settingFlags) {
       if(selectedButtons[firstIndex][secondIndex] === -1) {
         // button is flagged, do nothing
       } else {
         selectedButtons[firstIndex][secondIndex] = 1;
         $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
       };
-    } else if(event.which === 3) {
+    } else {
       // unset a flag that was previously set
       if(selectedButtons[firstIndex][secondIndex] === -1) {
         selectedButtons[firstIndex][secondIndex] = 0;
@@ -156,6 +158,16 @@ $("#NewGame").click(function() {
   toggleGameButtons();
   displayMineCountButtons();
   gameBoard = [];
+});
+
+function toggleFlagSelection() {
+  $("#DoneAddingFlagsButton").toggleClass("hidden")
+  toggleGameButtons();
+  settingFlags = !settingFlags;
+};
+
+$("#AddFlagsButton, #DoneAddingFlagsButton").click(function() {
+  toggleFlagSelection();
 });
 
 $("#ResetFlagButton").click(function() {
