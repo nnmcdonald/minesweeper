@@ -92,7 +92,17 @@ function toggleGameButtons() {
 
 // The function to be called when a gameBoard button is clicked
 let cellClicked = function() {
-  console.log($(this).attr("id"));
+  let buttonID = parseInt($(this).attr("id"));
+  let sizeOfGame = getGameSize();
+  let firstIndex = Math.floor(buttonID / sizeOfGame[0]);
+  let secondIndex = buttonID % sizeOfGame[1];
+  if(selectedButtons[firstIndex][secondIndex]) {
+    // do nothing
+  } else {
+    selectedButtons[firstIndex][secondIndex] = 1;
+    $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+  };
+
 };
 
 function displayMineCountButtons() {

@@ -8,6 +8,10 @@
   display: none;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
 .Button {
   background-color: white;
   color: black;
