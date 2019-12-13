@@ -7,6 +7,7 @@ let gameBoard = [];
 // -1 denotes a flag, 0 denotes unselected button, 1 denotes a selected button
 let selectedButtons = [];
 let mines = 0;
+let flags = 0;
 
 function updateCellValues(xVal, yVal) {
   gameBoard[xVal][yVal] = -1;
@@ -91,16 +92,37 @@ function toggleGameButtons() {
 };
 
 // The function to be called when a gameBoard button is clicked
-let cellClicked = function() {
+let cellClicked = function(event) {
   let buttonID = parseInt($(this).attr("id"));
   let sizeOfGame = getGameSize();
   let firstIndex = Math.floor(buttonID / sizeOfGame[0]);
   let secondIndex = buttonID % sizeOfGame[1];
-  if(selectedButtons[firstIndex][secondIndex]) {
+  // If this evaluates to true then the button has already been selected
+  // or flagged
+  if(selectedButtons[firstIndex][secondIndex] === 1) {
     // do nothing
   } else {
-    selectedButtons[firstIndex][secondIndex] = 1;
-    $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+    if(event.which === 1) {
+      if(selectedButtons[firstIndex][secondIndex] === -1) {
+        // button is flagged, do nothing
+      } else {
+        selectedButtons[firstIndex][secondIndex] = 1;
+        $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+      };
+    } else if(event.which === 3) {
+      // unset a flag that was previously set
+      if(selectedButtons[firstIndex][secondIndex] === -1) {
+        selectedButtons[firstIndex][secondIndex] = 0;
+        $(this).toggleClass("Button-table").toggleClass("Button-flagged");
+        flags--;
+      } else if(flags < parseInt(mines)) {
+        selectedButtons[firstIndex][secondIndex] = -1;
+        $(this).toggleClass("Button-table").toggleClass("Button-flagged");
+        flags++;
+      } else {
+        // max flags set, do nothing
+      }
+    };
   };
 
 };
@@ -120,7 +142,7 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(createGameBoard());
-    $("#GameBoardTable .Button-table").click(cellClicked);
+    $("#GameBoardTable .Button-table").mousedown(cellClicked);
     toggleGameButtons();
   });
 };
@@ -134,6 +156,20 @@ $("#NewGame").click(function() {
   toggleGameButtons();
   displayMineCountButtons();
   gameBoard = [];
+});
+
+$("#ResetFlagButton").click(function() {
+  flags = 0;
+  let gameDims = getGameSize();
+  for(let i = 0; i < gameDims[0]; i++) {
+    for(let j = 0; j < gameDims[1]; j++) {
+      if(selectedButtons[i][j] === -1) {
+        let buttonID = $("#GameBoardTable #" + ((i * gameDims[0]) + j));
+        buttonID.toggleClass("Button-table").toggleClass("Button-flagged");
+        selectedButtons[i][j] = 0;
+      };
+    };
+  };
 });
 
 // Reverts game to initial state

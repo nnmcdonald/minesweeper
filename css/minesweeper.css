@@ -71,6 +71,18 @@
   border: 1px solid red;
 }
 
+.Button-flagged {
+  text-align: center;
+  vertical-align: bottom;
+  background-color: red;
+  color: black;
+  width: 100%;
+  height: 18px;
+  border: none;
+  margin: none;
+  padding: none;
+}
+
 table {
   margin-bottom: 5px;
   border-collapse: collapse;
