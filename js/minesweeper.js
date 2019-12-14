@@ -1,7 +1,7 @@
 // gameSizes[i] is the dimensions for the gameBoard corresponding
 // to difficulties[i], difficulties[i] is the number of mines on the gameBoard
-let gameSizes = [[9,9],[16,16]];
-let difficulties = ["10", "40"];
+let gameSizes = [[9,9],[16,16],[16,30]];
+let difficulties = ["10", "40","99"];
 let gameBoard = [];
 // selectedButtons[i][j] indicates whether gameBoard[i][j] has been clicked,
 // -1 denotes a flag, 0 denotes unselected button, 1 denotes a selected button
@@ -50,7 +50,7 @@ function getGameSize() {
   // Used to access game dimensions in gameSizes
   let index = null;
   for(let i = 0; i < difficulties.length; i++) {
-    if(mines == difficulties[i]) {
+    if(mines === difficulties[i]) {
       return gameSizes[i];
     };
   };
@@ -85,6 +85,7 @@ function getGameTableHTML(dims) {
                       "' class='Button-table'></button></td>";
       cellIdentifier++;
     };
+    gameBoardTable += '</tr>';
   };
   gameBoardTable += "</table>";
   return gameBoardTable;
@@ -125,7 +126,7 @@ function revealMines() {
   for(let i = 0; i < dims[0]; i++) {
     for(let j = 0; j < dims[1]; j++) {
       if(gameBoard[i][j] === -1) {
-        $("#GameBoardTable #" + ((i * dims[0]) + j)).html("<img class='bomb' src='images/boom.png'>");
+        $("#GameBoardTable #" + ((i * dims[1]) + j)).html("<img class='bomb' src='images/boom.png'>");
       };
     };
   };
@@ -136,7 +137,7 @@ function hideMines() {
   for(let i = 0; i < dims[0]; i++) {
     for(let j = 0; j < dims[1]; j++) {
       if(gameBoard[i][j] === -1) {
-        $("#GameBoardTable #" + ((i * dims[0]) + j)).html("");
+        $("#GameBoardTable #" + ((i * dims[1]) + j)).html("");
       };
     };
   };
@@ -158,10 +159,10 @@ function gameWon() {
 };
 
 // The function to be called when a gameBoard button is clicked
-let cellClicked = function(event) {
+let cellClicked = function() {
   let buttonID = parseInt($(this).attr("id"));
   let sizeOfGame = getGameSize();
-  let firstIndex = Math.floor(buttonID / sizeOfGame[0]);
+  let firstIndex = Math.floor(buttonID / sizeOfGame[1]);
   let secondIndex = buttonID % sizeOfGame[1];
   // If this evaluates to true then the button has already been selected
   // or flagged
@@ -240,7 +241,7 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(createGameBoard());
-    $("#GameBoardTable .Button-table").mousedown(cellClicked);
+    $("#GameBoardTable .Button-table").click(cellClicked);
     toggleGameButtons();
   });
 };
@@ -276,7 +277,7 @@ $("#ResetFlagButton").click(function() {
   for(let i = 0; i < gameDims[0]; i++) {
     for(let j = 0; j < gameDims[1]; j++) {
       if(selectedButtons[i][j] === -1) {
-        let buttonID = $("#GameBoardTable #" + ((i * gameDims[0]) + j));
+        let buttonID = $("#GameBoardTable #" + ((i * gameDims[1]) + j));
         buttonID.toggleClass("Button-table").toggleClass("Button-flagged");
         selectedButtons[i][j] = 0;
       };
@@ -294,7 +295,7 @@ $("#ResetGameButton").click(function() {
   for(let i = 0; i < gameDims[0]; i++) {
     for(let j = 0; j < gameDims[1]; j++) {
       if(selectedButtons[i][j]) {
-        let buttonID = $("#GameBoardTable #" + ((i * gameDims[0]) + j));
+        let buttonID = $("#GameBoardTable #" + ((i * gameDims[1]) + j));
         if(selectedButtons[i][j] === 1) {
           buttonID.html("");
           buttonID.removeClass("disabled");
