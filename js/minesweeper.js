@@ -1,7 +1,7 @@
 // gameSizes[i] is the dimensions for the gameBoard corresponding
 // to difficulties[i], difficulties[i] is the number of mines on the gameBoard
-let gameSizes = [[9,9],[16,16],[16,30]]
-let difficulties = ["10", "40", "99"];
+let gameSizes = [[9,9],[16,16]];
+let difficulties = ["10", "40"];
 let gameBoard = [];
 // selectedButtons[i][j] indicates whether gameBoard[i][j] has been clicked,
 // -1 denotes a flag, 0 denotes unselected button, 1 denotes a selected button
@@ -177,6 +177,31 @@ let cellClicked = function(event) {
           gameLost();
         } else {
           $(this).html(gameBoard[firstIndex][secondIndex]).toggleClass("disabled");
+          switch(gameBoard[firstIndex][secondIndex]) {
+            case 1:
+              $(this).css("color", "blue");
+              break;
+            case 2:
+              $(this).css("color", "green");
+              break;
+            case 3:
+              $(this).css("color", "red");
+              break;
+            case 4:
+              $(this).css("color", "purple");
+              break;
+            case 5:
+              $(this).css("color", "maroon");
+              break;
+            case 6:
+              $(this).css("color", "turquoise");
+              break;
+            case 7:
+              $(this).css("color", "black");
+              break;
+            case 8:
+              $(this).css("color", "gray");
+          }
           unselectedButtonCount--;
           if(unselectedButtonCount === parseInt(mines)) {
             gameWon();
@@ -215,7 +240,6 @@ function displayMineCountButtons() {
     mines = $(this).attr("id");
     mineCountSection.toggleClass("hidden");
     gameSection.html(createGameBoard());
-    console.log(gameBoard);
     $("#GameBoardTable .Button-table").mousedown(cellClicked);
     toggleGameButtons();
   });
